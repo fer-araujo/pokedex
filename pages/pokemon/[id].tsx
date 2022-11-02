@@ -105,10 +105,10 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
             {pokemon.name}
           </p>
         </div>
-        <div className="w-3/5 relative mb-12 flex flex-row justify-around items-center ">
+        <div className="w-3/5 relative mb-12 lg:mb-[7%] xl:mb-10 flex flex-row justify-around items-center ">
           <Navigation prev={prevPage} next={nextPage} />
         </div>
-        <div className="w-full h-full lg:h-4/5 md:py-6  mb-6 flex flex-col lg:flex-row justify-around items-center">
+        <div className="w-full h-full lg:h-4/5 md:py-6 lg:py-0 xl:py-5 2xl:py-9 mb-6 flex flex-col lg:flex-row justify-around items-center">
           <motion.div
             animate={{ opacity: [0, 1] }}
             transition={{ delay: 0.1 }}
