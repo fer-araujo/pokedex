@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Card, Autocomplete, Filter } from "./";
+import { Card, Autocomplete, Filter, NoData } from "./";
 import { Pokemon, Result } from "../../interfaces/";
 
 interface Props {
@@ -39,9 +39,7 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
         <Filter types={types} options={list} callback={setFilterList} />
       </div>
       {showMsg && (
-        <div className="w-full flex justify-center text-center bg-orange-300">
-          <p>We couldn't find a Pokemon with that name</p>
-        </div>
+        <NoData message="We couldn't find a Pokemon with that name" />
       )}
 
       <div className="w-full lg:w-3/4 grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 p-6 ">
