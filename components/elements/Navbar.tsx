@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import Link from 'next/link'
 import Image from "next/image";
+import { MdOutlineLightMode, MdOutlineNightlight} from "react-icons/md";
 
 export const Navbar = () => {
   const [mounted, setMounted] = useState(false);
@@ -26,15 +27,15 @@ export const Navbar = () => {
           My Pokedex
         </p>
       </Link>
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-between">
         <button
           className="mx-2 bg-stone-700 bg-transparent text-black dark:text-white"
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         >
-          Toggle to {theme === "light" ? "dark" : "light"}
+        {theme === "light" ? <MdOutlineNightlight size={20} /> : <MdOutlineLightMode size={20} />}
         </button>
         <Link href="/favorites">
-          <p className="mx-2">Favorites</p>
+          <p className="text-lg font-Poppins font-black hover:text-yellow-400">Favorites</p>
         </Link>
       </div>
     </div>

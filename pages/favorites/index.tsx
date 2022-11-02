@@ -1,11 +1,44 @@
-import { Layout } from '../../components/layouts'
+import { useEffect, useState } from "react";
+import type { NextPage, GetStaticProps } from "next";
 
-const Favorites = () => {
-  return (
-    <Layout title="Favorites Pokemon">
-        <h1>Favorites Pokemon</h1>        
-    </Layout>
-  )
+import { getPokemon, getPokemonList, getTypes } from "../../api/api";
+import { NoData } from "../../components/elements";
+import { Pokemons } from "../../components/elements/Pokemons";
+import { Layout } from "../../components/layouts";
+import { Pokemon, Result } from "../../interfaces";
+import { localFavorites } from "../../utils";
+
+interface Props {
+  allTypes: Result[];
 }
 
-export default Favorites
+const Favorites: NextPage<Props> = ({ allTypes }) => {
+  const [favoritePokemons, setFavoritePokemons] = useState<Pokemon[]>([]);
+
+  useEffect(() => {
+    setFavoritePokemons(localFavorites.pokemons());
+  }, []);
+
+
+  return (
+    <Layout title="Favorites Pokemon">
+      {favoritePokemons.length === 0 ? (
+        <NoData message="No favorites Pokemons found." />
+      ) : (
+        <Pokemons list={favoritePokemons} types={allTypes} />
+      )}
+    </Layout>
+  );
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const allTypes: Result[] = await getTypes();
+
+  return {
+    props: {
+      allTypes,
+    },
+  };
+};
+
+export default Favorites;

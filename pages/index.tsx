@@ -31,7 +31,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const pokemon = data.results;
   
   for (let i = 1; i <= pokemon.length + 1; i++) {
-    const { data } = await getPokemon(i.toString());
+    const { data } = await getPokemon(`${i}`);
     allPokemons.push(data);
   }
 
