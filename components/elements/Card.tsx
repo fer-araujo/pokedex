@@ -56,6 +56,7 @@ export const Card: FC<Props> = ({ id, name, image }) => {
 
   const getTypes = async () => {
     const pokeObj: Type[] = await getPokemonType(id);
+
     const main = getBackground(pokeObj[0].type.name);
     setMainType(main);
     setTypes(pokeObj);
