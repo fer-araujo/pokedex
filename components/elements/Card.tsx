@@ -2,7 +2,6 @@ import { FC, useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Type } from "../../interfaces";
-
 interface Props {
   id: number;
   name: string;
@@ -100,7 +99,7 @@ export const Card: FC<Props> = ({ id, name, image, types }) => {
             return (
               <span
                 key={index}
-                className={`first-letter:uppercase ${bg} inline-block rounded-full px-3 py-1 text-sm font-semibold text-white group-hover:text-white mr-2`}
+                className={`first-letter:uppercase ${bg}  inline-block rounded-full px-3 py-1 text-sm font-semibold text-white group-hover:text-white mr-2`}
               >
                 {t.type.name}
               </span>
