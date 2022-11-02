@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { Card, Autocomplete, Filter, NoData, Navigation } from "./";
-import { Pokemon, Result } from "../../interfaces/";
+import { Pokemon, Result, Type } from "../../interfaces/";
 import { motion } from "framer-motion";
+import { getPokemonType } from "../../api/api";
 interface Props {
   list: Pokemon[];
   types: Result[];
@@ -10,6 +11,7 @@ interface Props {
 export const Pokemons: FC<Props> = ({ list, types }) => {
   const [showMsg, setShowMsg] = useState<boolean>(false);
   const [pokemons, setPokemons] = useState<Pokemon[]>(list);
+  const [pokeTypes, setPokeTypes] = useState<Pokemon[]>([]);
   const [filterList, setFilterList] = useState<Pokemon[]>(list);
   const [searchList, setSearchList] = useState<Pokemon[]>(list);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -25,6 +27,10 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
   useEffect(() => {
     pokemons.length === 0 ? setShowMsg(true) : setShowMsg(false);
   }, [pokemons]);
+
+  useEffect(() => {
+    addTypes();
+  }, [])
 
   const pokemonsPaging = (): Pokemon[] => {
     return pokemons.slice(currentPage, currentPage + 25);
@@ -50,6 +56,17 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
     setFilterList(filter);
     setCurrentPage(0);
   };
+
+  const addTypes = async () => {
+    const pokeIDs = list.map(poke =>{ return ({id:poke.id,name:poke.name,image: poke.image})})
+    const typesArray = [];
+    for (const poke of pokeIDs) {
+      const types: Type[] = await getPokemonType(poke.id);
+      const pokeObj = {id:poke.id,name:poke.name,image:poke.image,types:types}
+      typesArray.push(pokeObj);
+    }
+    setPokeTypes(typesArray)
+  }
 
   const container = {
     hidden: { opacity: 0 },
@@ -77,7 +94,7 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
           options={searchList}
           callback={onSearch}
         />
-        <Filter types={types} options={list} callback={onFilter} />
+        <Filter types={types} options={pokeTypes} callback={onFilter} />
       </div>
       {showMsg && (
         <NoData message="We couldn't find a Pokemon with that name" />
@@ -98,10 +115,9 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
             return (
               <motion.div variants={item} key={poke.id}>
                 <Card
-                  key={poke.id}
-                  id={poke.id}
-                  name={poke.name}
-                  image={poke.image}
+                  id={poke?.id}
+                  name={poke?.name}
+                  image={poke?.image}
                 />
               </motion.div>
             );

@@ -17,7 +17,6 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ pokemons, allTypes }) => {
-  console.log(pokemons);
   return (
     <Layout title="Pokemons List">
       <Pokemons list={pokemons} types={allTypes} />

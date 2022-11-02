@@ -11,14 +11,14 @@ interface Props {
 export const Filter: FC<Props> = ({ types, options, callback }) => {
 
   const [activeElement, setActiveElement] = useState('All');
-
+  console.log(options)
   const handleFilter = (type: string) => {
     if (type === "All") {
       callback(options);
       setActiveElement("All")
     } else {
       const filtered = options.filter((pokemon) =>
-        pokemon.types.some((t) => t.type.name === type)
+        pokemon.types?.some((t) => t.type.name === type)
       );
       callback(filtered);
       setActiveElement(type);
