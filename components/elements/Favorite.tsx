@@ -1,18 +1,17 @@
 import { FC, useState, useEffect } from "react";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
-
+import { motion } from "framer-motion";
 interface Props {
   isFavorite: boolean;
   toggleFavorite: Function;
 }
 
 export const Favorite: FC<Props> = ({ isFavorite, toggleFavorite }) => {
+  const [favorite, setFavorite] = useState<boolean>(false);
 
-    const [favorite,setFavorite] = useState<boolean>(false);
-
-    useEffect(() => {
-        setFavorite(isFavorite)
-    },[isFavorite]);
+  useEffect(() => {
+    setFavorite(isFavorite);
+  }, [isFavorite]);
 
   return (
     <div
@@ -24,15 +23,35 @@ export const Favorite: FC<Props> = ({ isFavorite, toggleFavorite }) => {
       onClick={() => toggleFavorite()}
     >
       {favorite ? (
-        <>
+        <motion.div whileHover="hover" className="flex">
           <p className="text-sm font-thin mx-2">Favorite</p>
-          <AiFillStar className="text-yellow-500" size={18} />
-        </>
+          <motion.div
+            variants={{
+              hover: {
+                scale: [1, 2, 2, 1, 1],
+                rotate: [0, 0, 270, 270, 0],
+                borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+              },
+            }}
+          >
+            <AiFillStar className="text-yellow-500" size={18} />
+          </motion.div>
+        </motion.div>
       ) : (
-        <>
+        <motion.div whileHover="hover" className="flex">
           <p className="text-sm font-thin mx-2">Add to Favorites</p>
-          <AiOutlineStar className="text-yellow-500" size={18} />
-        </>
+          <motion.div
+            variants={{
+              hover: {
+                scale: [1, 2, 2, 1, 1],
+                rotate: [0, 0, 270, 270, 0],
+                borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+              },
+            }}
+          >
+            <AiOutlineStar className="text-yellow-500" size={18} />
+          </motion.div>
+        </motion.div>
       )}
     </div>
   );

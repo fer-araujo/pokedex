@@ -2,7 +2,8 @@ import { useState } from "react";
 import { GetStaticProps, GetStaticPaths, NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Navigation, Back, Favorite } from "../../components/elements"
+import { motion } from "framer-motion";
+import { Navigation, Back, Favorite } from "../../components/elements";
 import { getPokemonBig, getPokemonDescription } from "../../api/api";
 import { Layout } from "../../components/layouts";
 import { Pokemon } from "../../interfaces";
@@ -22,13 +23,13 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
 
   const prevPage = () => {
     const prev = pokemon.id - 1 > 0 ? pokemon.id - 1 : 1;
-    router.push(`${prev}`)
-  }
+    router.push(`${prev}`);
+  };
 
   const nextPage = () => {
     const next = pokemon.id + 1 < 252 ? pokemon.id + 1 : 251;
-    router.push(`${next}`)
-  }
+    router.push(`${next}`);
+  };
 
   const handleToggleFavorite = () => {
     localFavorites.toggleFavorite(pokemon.id, {
@@ -108,8 +109,16 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
           <Navigation prev={prevPage} next={nextPage} />
         </div>
         <div className="w-full h-full lg:h-4/5 md:py-6  mb-6 flex flex-col lg:flex-row justify-around items-center">
-          <div className="w-full lg:w-3/4 xl:w-3/5 h-full bg-neutral-100/50 dark:bg-neutral-500/50 flex flex-col lg:flex-row justify-center items-center shadow-[1px_0px_10px_4px_rgba(0,0,0,0.16)] dark:shadow-[0px_2px_10px_10px_rgba(0,0,0,0.15)] rounded-xl">
-            <div className="w-2/5 sm:w-2/6 md:w-1/3 lg:w-2/5 h-full md:h-1/4 lg:h-1/2 md:py-6 lg:py-0 lg:px-6 flex flex-col justify-between items-center">
+          <motion.div
+            animate={{ opacity: [0, 1] }}
+            transition={{ delay: 0.1 }}
+            className="w-full lg:w-3/4 xl:w-3/5 h-full bg-neutral-100/50 dark:bg-neutral-500/50 flex flex-col lg:flex-row justify-center items-center shadow-[1px_0px_10px_4px_rgba(0,0,0,0.16)] dark:shadow-[0px_2px_10px_10px_rgba(0,0,0,0.15)] rounded-xl"
+          >
+            <motion.div
+              animate={{ opacity: [0, 1] }}
+              transition={{ delay: 0.5 }}
+              className="w-2/5 sm:w-2/6 md:w-1/3 lg:w-2/5 h-full md:h-1/4 lg:h-1/2 md:py-6 lg:py-0 lg:px-6 flex flex-col justify-between items-center"
+            >
               <Image
                 src={pokemon.image}
                 alt={`${pokemon.name}-${pokemon.id}`}
@@ -118,7 +127,7 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
                 height={100}
                 priority
               />
-            </div>
+            </motion.div>
 
             <div className="w-full lg:w-3/5 flex flex-col justify-between items-start py-4 px-6 lg:pr-10">
               <div className="w-full flex flex-row justify-between items-center my-2">
@@ -127,12 +136,14 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
                     Species:
                   </span>
                   <p className="text-xl font-thin capitalize">
-                    {pokemon.species?.name }
+                    {pokemon.species?.name}
                   </p>
                 </div>
 
-                <Favorite isFavorite={isInFavorites} toggleFavorite={handleToggleFavorite}/>
-                
+                <Favorite
+                  isFavorite={isInFavorites}
+                  toggleFavorite={handleToggleFavorite}
+                />
               </div>
 
               <p className="text-lg font-thin my-1">{description}</p>
@@ -179,17 +190,17 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
                       </div>
 
                       <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-neutral-300 dark:bg-neutral-200">
-                        <div
-                          style={{ width: `${stats.base_stat}%` }}
+                        <motion.div
+                          animate={{ width: ["0%", `${stats.base_stat}%`] }}
                           className={`${bg} flex flex-col text-center whitespace-nowrap justify-center transition-width duration-500`}
-                        ></div>
+                        ></motion.div>
                       </div>
                     </div>
                   );
                 })}
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </Layout>
