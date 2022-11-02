@@ -1,4 +1,4 @@
-import React, { useState, FC, useEffect } from "react";
+import React, { useState, FC, useEffect, ChangeEvent } from "react";
 import { Pokemon } from "../../interfaces";
 
 interface Props {
@@ -11,17 +11,17 @@ interface Props {
 export const Autocomplete: FC<Props> = ({ label, options, callback }) => {
   const [selected, setSelected] = useState<string>("");
 
-  const showFilter = (e: any) => {
-    const value = e.currentTarget.value;
+  const showFilter = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
     if (value.length > 0) {
       const filteredValue = options.filter(
         (option) => option.name?.toLowerCase().indexOf(value.toLowerCase()) > -1
       );
       callback(filteredValue);
-      setSelected(e.currentTarget.value);
+      setSelected(e.target.value);
     } else {
       callback(options);
-      setSelected(e.currentTarget.value);
+      setSelected(e.target.value);
     }
   };
 

@@ -1,8 +1,8 @@
 import type { NextPage, GetStaticProps } from "next";
-import React from "react";
+import React, { useState } from "react";
 import {
-  getPokemon,
   getPokemonList,
+  getPokemonSmall,
   getTypes,
 } from "../api/api";
 import { Pokemons } from "../components/elements/Pokemons";
@@ -16,6 +16,7 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ pokemons, allTypes }) => {
+  
   return (
     <Layout title="Pokemons List">
       <Pokemons list={pokemons} types={allTypes} />
@@ -25,26 +26,18 @@ const Home: NextPage<Props> = ({ pokemons, allTypes }) => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { data } = await getPokemonList();
+
   const allTypes: Result[] = await getTypes();
 
-  const allPokemons: PokemonFull[] = [];
+  const allPokemons: Pokemon[] = [];
   const pokemon = data.results;
-  
-  for (let i = 1; i <= pokemon.length + 1; i++) {
-    const { data } = await getPokemon(`${i}`);
-    allPokemons.push(data);
+  for (let i = 1; i <= pokemon.length ; i++) {
+    const pokeObj = await getPokemonSmall(i);
+    allPokemons.push(pokeObj);
   }
 
-  const pokemons: Pokemon[] = 
+  const pokemons: Pokemon[] =  allPokemons
   
-  allPokemons.map((poke, index) => {
-    return ({
-      id: poke.id,
-      name: poke.name,
-      image: poke.sprites.other?.dream_world.front_default || 'no-image.png',
-      types: poke.types
-    });
-  });
 
   return {
     props: {
