@@ -1,6 +1,8 @@
 import { Pokemon } from "../interfaces";
 
 const toggleFavorite = (id: number, obj:Pokemon) => {
+  if (typeof window === 'undefined') return false;
+
   let favorites: Pokemon[] = JSON.parse(
     localStorage.getItem("favorites") || "[]"
   );

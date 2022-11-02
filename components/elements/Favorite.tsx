@@ -12,8 +12,8 @@ export const Favorite: FC<Props> = ({ isFavorite, toggleFavorite }) => {
 
     useEffect(() => {
         setFavorite(isFavorite)
-    },[]);
-    
+    },[isFavorite]);
+
   return (
     <div
       className="flex flex-row justify-between items-center cursor-pointer relative 
