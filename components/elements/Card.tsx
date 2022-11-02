@@ -2,16 +2,16 @@ import { FC, useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Type } from "../../interfaces";
+import { getPokemonType } from "../../api/api";
 interface Props {
   id: number;
   name: string;
   image: string;
-  types: Type[];
 }
 
-export const Card: FC<Props> = ({ id, name, image, types }) => {
-  const [mainTypes, setMainTypes] = useState<string>("");
-
+export const Card: FC<Props> = ({ id, name, image }) => {
+  const [mainType, setMainType] = useState<string>("");
+  const [types, setTypes] = useState<Type[]>([]);
   const router = useRouter();
 
   const pokemonProfile = () => {
@@ -55,8 +55,10 @@ export const Card: FC<Props> = ({ id, name, image, types }) => {
   };
 
   const getTypes = async () => {
-    const main = getBackground(types[0].type.name);
-    setMainTypes(main);
+    const pokeObj: Type[] = await getPokemonType(id);
+    const main = getBackground(pokeObj[0].type.name);
+    setMainType(main);
+    setTypes(pokeObj);
   };
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export const Card: FC<Props> = ({ id, name, image, types }) => {
 
   return (
     <div
-      className={`max-w px-0 m-2 ${mainTypes} rounded-lg group relative cursor-pointer items-center justify-center overflow-hidden shadow-[0px_2px_8px_1px_rgba(120,120,120,0.75)] dark:shadow-[0px_2px_8px_1px_rgba(0,0,0,0.75)]`}
+      className={`max-w px-0 m-2 ${mainType} rounded-lg group relative cursor-pointer items-center justify-center overflow-hidden shadow-[0px_2px_8px_1px_rgba(120,120,120,0.75)] dark:shadow-[0px_2px_8px_1px_rgba(0,0,0,0.75)]`}
       onClick={pokemonProfile}
     >
       <div className="w-full h-3/4 px-6 py-8 flex justify-center items-center">

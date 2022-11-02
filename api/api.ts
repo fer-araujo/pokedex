@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PokemonFull, PokemonList, Description, Types } from "../interfaces";
+import { PokemonFull, PokemonList, Description, Types, Pokemon } from "../interfaces";
 
 const pokeApi = axios.create({
   baseURL: "https://pokeapi.co/api/v2",
@@ -29,7 +29,6 @@ export async function getPokemonBig(number: string) {
   }
 }
 
-
 export async function getPokemonSmall(number: number) {
   const { data } = await pokeApi.get<PokemonFull>(`/pokemon/${number}`);
 
@@ -37,8 +36,14 @@ export async function getPokemonSmall(number: number) {
     id: data.id,
     name: data.name,
     image: data.sprites.other?.dream_world.front_default || 'no-image.png',
-    types: data.types
+    types: data.types,
   }
+}
+
+export async function getPokemonType(number: number) {
+  const { data } = await pokeApi.get<PokemonFull>(`/pokemon/${number}`);
+
+  return data.types
 }
 
 export async function getPokemonDescription(number: string) {
@@ -49,5 +54,9 @@ export async function getPokemonDescription(number: string) {
 
   return data.flavor_text_entries[index].flavor_text.replace(/[\n\f]/g, " ");
 
+}
+
+export function getPokemonImg(number: number): string {
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${number}.svg`;
 }
 

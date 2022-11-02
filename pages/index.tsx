@@ -1,6 +1,7 @@
 import type { NextPage, GetStaticProps } from "next";
 import React, { useState } from "react";
 import {
+  getPokemonImg,
   getPokemonList,
   getPokemonSmall,
   getTypes,
@@ -16,7 +17,7 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ pokemons, allTypes }) => {
-  
+  console.log(pokemons);
   return (
     <Layout title="Pokemons List">
       <Pokemons list={pokemons} types={allTypes} />
@@ -29,14 +30,18 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   const allTypes: Result[] = await getTypes();
 
-  const allPokemons: Pokemon[] = [];
   const pokemon = data.results;
-  for (let i = 1; i <= pokemon.length ; i++) {
-    const pokeObj = await getPokemonSmall(i);
-    allPokemons.push(pokeObj);
-  }
 
-  const pokemons: Pokemon[] =  allPokemons
+  const pokemons: Pokemon[] =  pokemon.map((pokemon, index) => {
+
+    return(
+      {
+        id: index + 1,
+        name: pokemon.name,
+        image: getPokemonImg(index + 1)
+      }
+    )
+  })
   
 
   return {
