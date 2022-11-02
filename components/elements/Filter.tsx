@@ -1,5 +1,4 @@
-import { type } from "os";
-import { FC, useState } from "react";
+import { FC, useState,useEffect } from "react";
 import { Pokemon, Result } from "../../interfaces";
 
 interface Props {
@@ -11,13 +10,14 @@ interface Props {
 export const Filter: FC<Props> = ({ types, options, callback }) => {
 
   const [activeElement, setActiveElement] = useState('All');
-  console.log(options)
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+
   const handleFilter = (type: string) => {
     if (type === "All") {
       callback(options);
       setActiveElement("All")
     } else {
-      const filtered = options.filter((pokemon) =>
+      const filtered = pokemons.filter((pokemon) =>
         pokemon.types?.some((t) => t.type.name === type)
       );
       callback(filtered);
@@ -62,6 +62,10 @@ export const Filter: FC<Props> = ({ types, options, callback }) => {
 
     return bg;
   };
+
+  useEffect(() => {
+    setPokemons(options)
+  },[])
 
   return (
     <div className="w-full flex justify-center items-center mt-4">
