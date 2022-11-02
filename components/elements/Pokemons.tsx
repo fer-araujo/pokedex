@@ -28,10 +28,6 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
     pokemons.length === 0 ? setShowMsg(true) : setShowMsg(false);
   }, [pokemons]);
 
-  useEffect(() => {
-    addTypes();
-  }, [])
-
   const pokemonsPaging = (): Pokemon[] => {
     return pokemons.slice(currentPage, currentPage + 25);
   };
@@ -58,15 +54,27 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
   };
 
   const addTypes = async () => {
-    const pokeIDs = list.map(poke =>{ return ({id:poke.id,name:poke.name,image: poke.image})})
+    const pokeIDs = list.map((poke) => {
+      return { id: poke.id, name: poke.name, image: poke.image };
+    });
     const typesArray = [];
     for (const poke of pokeIDs) {
       const types: Type[] = await getPokemonType(poke.id);
-      const pokeObj = {id:poke.id,name:poke.name,image:poke.image,types:types}
+      const pokeObj = {
+        id: poke.id,
+        name: poke.name,
+        image: poke.image,
+        types: types,
+      };
       typesArray.push(pokeObj);
     }
-    setPokeTypes(typesArray)
-  }
+    
+    setPokeTypes(typesArray);
+  };
+
+  useEffect(() => {
+    addTypes();
+  }, [list]);
 
   const container = {
     hidden: { opacity: 0 },
@@ -100,9 +108,7 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
         <NoData message="We couldn't find a Pokemon with that name" />
       )}
 
-      {pokemons.length >= 25 && (
-        <Navigation prev={prevPage} next={nextPage} />
-      )}
+      {pokemons.length >= 25 && <Navigation prev={prevPage} next={nextPage} />}
 
       <motion.div
         variants={container}
@@ -114,11 +120,7 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
           pokemonsPaging()?.map((poke) => {
             return (
               <motion.div variants={item} key={poke.id}>
-                <Card
-                  id={poke?.id}
-                  name={poke?.name}
-                  image={poke?.image}
-                />
+                <Card id={poke?.id} name={poke?.name} image={poke?.image} />
               </motion.div>
             );
           })}
