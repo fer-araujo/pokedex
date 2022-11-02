@@ -1,4 +1,5 @@
-import { Type } from ".";
+import { Species, Type } from ".";
+import { Stat } from './pokemonFull';
 
 export interface PokemonList {
     count:    number;
@@ -12,4 +13,9 @@ export interface Pokemon {
     name: string;
     image: string;
     types: Type[];
+    height?: number;
+    weight?: number;
+    species?: Species;
+    stats?: Stat[];
+    url?: string;
 }

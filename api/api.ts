@@ -14,8 +14,31 @@ export async function getTypes() {
   return data.results;
 }
 
-export async function getPokemon(number: string) {
-  return await pokeApi.get<PokemonFull>(`/pokemon/${number}`);
+export async function getPokemonBig(number: string) {
+  const { data } = await pokeApi.get<PokemonFull>(`/pokemon/${number}`);
+
+  return {
+    id: data.id,
+    name: data.name,
+    image: data.sprites.other?.dream_world.front_default ,
+    types: data.types,
+    height: data.height,
+    weight: data.weight,
+    species: data.species,
+    stats: data.stats,
+  }
+}
+
+
+export async function getPokemonSmall(number: number) {
+  const { data } = await pokeApi.get<PokemonFull>(`/pokemon/${number}`);
+
+  return {
+    id: data.id,
+    name: data.name,
+    image: data.sprites.other?.dream_world.front_default || 'no-image.png',
+    types: data.types
+  }
 }
 
 export async function getPokemonDescription(number: string) {

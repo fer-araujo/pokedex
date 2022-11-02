@@ -3,14 +3,14 @@ import { GetStaticProps, GetStaticPaths, NextPage } from "next";
 import Image from "next/image";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
 
-import { getPokemon, getPokemonDescription } from "../../api/api";
+import { getPokemonBig, getPokemonDescription } from "../../api/api";
 import { Layout } from "../../components/layouts";
-import { PokemonFull } from "../../interfaces";
+import { Pokemon } from "../../interfaces";
 import { localFavorites } from "../../utils";
 import Link from "next/link";
 
 interface Props {
-  pokemon: PokemonFull;
+  pokemon: Pokemon;
   description: string;
 }
 
@@ -22,7 +22,7 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
     localFavorites.toggleFavorite(pokemon.id, {
       id: pokemon.id,
       name: pokemon.name,
-      image: pokemon.sprites.other?.dream_world.front_default || "no-image.png",
+      image: pokemon.image,
       types: pokemon.types,
     });
     setIsInFavorites(!isInFavorites);
@@ -118,10 +118,7 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
           <div className="w-full lg:w-3/4 xl:w-3/5 h-full bg-neutral-100/50 dark:bg-neutral-500/50 flex flex-col lg:flex-row justify-center items-center shadow-[1px_0px_10px_4px_rgba(0,0,0,0.16)] dark:shadow-[0px_2px_10px_10px_rgba(0,0,0,0.15)] rounded-xl">
             <div className="w-2/5 sm:w-2/6 md:w-1/3 lg:w-2/5 h-full md:h-1/4 lg:h-1/2 md:py-6 lg:py-0 lg:px-6 flex flex-col justify-between items-center">
               <Image
-                src={
-                  pokemon.sprites.other?.dream_world.front_default ||
-                  "/no-image.png"
-                }
+                src={pokemon.image || 'no-image.png'}
                 alt={`${pokemon.name}-${pokemon.id}`}
                 style={{ width: "100%", height: "300px" }}
                 width={100}
@@ -137,7 +134,7 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
                     Species:
                   </span>
                   <p className="text-xl font-thin capitalize">
-                    {pokemon.species.name}
+                    {pokemon.species?.name }
                   </p>
                 </div>
 
@@ -170,7 +167,7 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
                   Height:
                 </span>
                 <p className="text-lg font-normal">
-                  {(pokemon.height / 10).toFixed(2)} m
+                  {((pokemon.height || 10) / 10).toFixed(2)} m
                 </p>
               </div>
               <div className="flex flex-row justify-center items-center my-2">
@@ -178,7 +175,7 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
                   Weight:
                 </span>
                 <p className="text-lg font-normal">
-                  {(pokemon.weight / 10).toFixed(2)} Kg
+                  {((pokemon.weight || 10) / 10).toFixed(2)} Kg
                 </p>
               </div>
               <div>
@@ -238,13 +235,13 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params as { id: string };
 
-  const { data } = await getPokemon(id);
+  const poke = await getPokemonBig(id);
   const description = await getPokemonDescription(id);
 
   return {
     props: {
       key: id,
-      pokemon: data,
+      pokemon: poke,
       description: description,
     },
   };
