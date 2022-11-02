@@ -102,7 +102,6 @@ export const Pokemons: FC<Props> = ({ list, types }) => {
                   id={poke.id}
                   name={poke.name}
                   image={poke.image}
-                  types={poke.types}
                 />
               </motion.div>
             );
