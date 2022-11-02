@@ -20,11 +20,11 @@ export const Navbar = () => {
         href="/"
         className="w-full flex justify-start items-center cursor-pointer"
       >
-        <div className="w-1/8 mx-2">
+        <div className="w-1/8 mx-2 hidden sm:block">
           <Image src="/images/pokeball.png" alt="icon" width={35} height={35} />
         </div>
 
-        <p className="w-7/8 mx-2 text-2xl font-Poppins font-extrabold text-neutral-700 dark:text-white">
+        <p className="w-7/8 sm:mx-2 text-2xl font-Poppins font-extrabold text-neutral-700 dark:text-white">
           My Pokedex
         </p>
       </Link>
@@ -39,7 +39,7 @@ export const Navbar = () => {
             <MdOutlineLightMode size={20} />
           )}
         </button>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between items-center">
           <Link href="/">
             <p className="mx-6 text-lg font-Poppins font-black hover:text-neutral-400">
               Home

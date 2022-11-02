@@ -65,7 +65,7 @@ export const Filter: FC<Props> = ({ types, options, callback }) => {
 
   useEffect(() => {
     setPokemons(options)
-  },[])
+  },[options])
 
   return (
     <div className="w-full flex justify-center items-center mt-4">
