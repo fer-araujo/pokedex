@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { GetStaticProps, GetStaticPaths, NextPage } from "next";
 import Image from "next/image";
-import { AiOutlineStar, AiFillStar } from "react-icons/ai";
-
+import { useRouter } from "next/router";
+import { Navigation, Back, Favorite } from "../../components/elements"
 import { getPokemonBig, getPokemonDescription } from "../../api/api";
 import { Layout } from "../../components/layouts";
 import { Pokemon } from "../../interfaces";
 import { localFavorites } from "../../utils";
-import Link from "next/link";
 
 interface Props {
   pokemon: Pokemon;
@@ -18,6 +17,19 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
   const [isInFavorites, setIsInFavorites] = useState(
     localFavorites.existInFavorites(pokemon.id)
   );
+
+  const router = useRouter();
+
+  const prevPage = () => {
+    const prev = pokemon.id - 1 > 0 ? pokemon.id - 1 : 1;
+    router.push(`${prev}`)
+  }
+
+  const nextPage = () => {
+    const next = pokemon.id + 1 < 252 ? pokemon.id + 1 : 251;
+    router.push(`${next}`)
+  }
+
   const handleToggleFavorite = () => {
     localFavorites.toggleFavorite(pokemon.id, {
       id: pokemon.id,
@@ -81,6 +93,8 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
 
   return (
     <Layout title={pokemon.name}>
+      <Back />
+
       <div className="w-full h-full lg:h-screen flex flex-col justify-start items-center ">
         <div className="flex flex-row justify-center items-center my-10 md:my-2 md:mt-10">
           <span className="mr-4 text-4xl font-black capitalize font-Poppins">
@@ -90,35 +104,14 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
             {pokemon.name}
           </p>
         </div>
-        <div className="w-full mb-8 md:m-0 flex flex-row justify-around items-center ">
-          <Link
-            href={`/pokemon/${pokemon.id - 1 > 0 ? pokemon.id - 1 : 1}`}
-            className="cursor-pointer flex items-center justify-between group/left"
-          >
-            <p className="text-xl mx-2 group-hover/left:text-neutral-300 group-hover/left:-translate-x-0.5 transition-translate duration-500">
-              &larr;
-            </p>{" "}
-            <p className="mx-2 group-hover/left:text-neutral-300 group-hover/left:translate-x-1 transition-translate duration-500">
-              Previous
-            </p>{" "}
-          </Link>
-          <Link
-            href={`/pokemon/${pokemon.id + 1 < 252 ? pokemon.id + 1 : 251}`}
-            className="cursor-pointer flex items-center justify-between group/right"
-          >
-            <p className="mx-2 group-hover/right:text-neutral-300 group-hover/right:-translate-x-0.5 transition-translate duration-500">
-              Next
-            </p>{" "}
-            <p className="text-xl mx-2 group-hover/right:text-neutral-300 group-hover/right:translate-x-1 transition-translate duration-500">
-              &rarr;
-            </p>{" "}
-          </Link>
+        <div className="w-3/5 relative mb-12 flex flex-row justify-around items-center ">
+          <Navigation prev={prevPage} next={nextPage} />
         </div>
         <div className="w-full h-full lg:h-4/5 md:py-6  mb-6 flex flex-col lg:flex-row justify-around items-center">
           <div className="w-full lg:w-3/4 xl:w-3/5 h-full bg-neutral-100/50 dark:bg-neutral-500/50 flex flex-col lg:flex-row justify-center items-center shadow-[1px_0px_10px_4px_rgba(0,0,0,0.16)] dark:shadow-[0px_2px_10px_10px_rgba(0,0,0,0.15)] rounded-xl">
             <div className="w-2/5 sm:w-2/6 md:w-1/3 lg:w-2/5 h-full md:h-1/4 lg:h-1/2 md:py-6 lg:py-0 lg:px-6 flex flex-col justify-between items-center">
               <Image
-                src={pokemon.image || 'no-image.png'}
+                src={pokemon.image}
                 alt={`${pokemon.name}-${pokemon.id}`}
                 style={{ width: "100%", height: "300px" }}
                 width={100}
@@ -138,26 +131,8 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
                   </p>
                 </div>
 
-                <div
-                  className="flex flex-row justify-between items-center cursor-pointer relative 
-              before:content-[''] before:absolute before:block before:w-full before:h-[1px] 
-              before:-bottom-2 before:left-0 before:bg-neutral-800 dark:before:bg-white
-              before:hover:scale-x-100 before:scale-x-0 before:origin-top-left
-              before:transition before:ease-in-out before:duration-300"
-                  onClick={handleToggleFavorite}
-                >
-                  {isInFavorites ? (
-                    <>
-                      <p className="text-sm font-thin mx-2">Favorite</p>
-                      <AiFillStar className="text-yellow-500" size={18} />
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-thin mx-2">Add to Favorites</p>
-                      <AiOutlineStar className="text-yellow-500" size={18} />
-                    </>
-                  )}
-                </div>
+                <Favorite isFavorite={isInFavorites} toggleFavorite={handleToggleFavorite}/>
+                
               </div>
 
               <p className="text-lg font-thin my-1">{description}</p>

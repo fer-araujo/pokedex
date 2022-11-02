@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { type } from "os";
+import { FC, useState } from "react";
 import { Pokemon, Result } from "../../interfaces";
 
 interface Props {
@@ -8,14 +9,19 @@ interface Props {
 }
 
 export const Filter: FC<Props> = ({ types, options, callback }) => {
+
+  const [activeElement, setActiveElement] = useState('All');
+
   const handleFilter = (type: string) => {
     if (type === "All") {
       callback(options);
+      setActiveElement("All")
     } else {
       const filtered = options.filter((pokemon) =>
         pokemon.types.some((t) => t.type.name === type)
       );
       callback(filtered);
+      setActiveElement(type);
     }
   };
 
@@ -62,7 +68,7 @@ export const Filter: FC<Props> = ({ types, options, callback }) => {
       <div className=" w-full lg:w-4/6 flex flex-nowrap lg:flex-wrap justify-start lg:justify-center items-center overflow-x-auto">
         <span
           key={types.length + 1}
-          className={`first-letter:uppercase cursor-pointer bg-neutral-400 hover:bg-opacity-40 inline-block rounded-full px-4 py-1 text-md font-semibold text-white my-4 mr-2`}
+          className={`first-letter:uppercase cursor-pointer bg-neutral-400 ${ activeElement !== "All" ? "bg-opacity-60" : ""} hover:bg-opacity-40 inline-block rounded-full px-4 py-1 text-md font-semibold text-white my-4 mr-2`}
           onClick={() => handleFilter("All")}
         >
           All
@@ -72,7 +78,7 @@ export const Filter: FC<Props> = ({ types, options, callback }) => {
           return (
             <span
               key={index}
-              className={`first-letter:uppercase cursor-pointer ${bg} hover:bg-opacity-40 inline-block rounded-full px-4 py-1 text-md font-semibold text-white my-4 mr-2`}
+              className={`first-letter:uppercase cursor-pointer ${bg} ${ activeElement !== type.name ? "bg-opacity-60" : ""} hover:bg-opacity-40 inline-block rounded-full px-4 py-1 text-md font-semibold text-white my-4 mr-2`}
               onClick={() => handleFilter(type.name)}
             >
               {type.name}

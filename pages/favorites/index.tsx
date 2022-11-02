@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import type { NextPage, GetStaticProps } from "next";
-
-import { getPokemon, getPokemonList, getTypes } from "../../api/api";
-import { NoData } from "../../components/elements";
+import { getTypes } from "../../api/api";
+import { NoData, Back } from "../../components/elements";
 import { Pokemons } from "../../components/elements/Pokemons";
 import { Layout } from "../../components/layouts";
 import { Pokemon, Result } from "../../interfaces";
@@ -19,9 +18,9 @@ const Favorites: NextPage<Props> = ({ allTypes }) => {
     setFavoritePokemons(localFavorites.pokemons());
   }, []);
 
-
   return (
     <Layout title="Favorites Pokemon">
+      <Back />
       {favoritePokemons.length === 0 ? (
         <NoData message="No favorites Pokemons found." />
       ) : (

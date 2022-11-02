@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import Link from 'next/link'
+import Link from "next/link";
 import Image from "next/image";
-import { MdOutlineLightMode, MdOutlineNightlight} from "react-icons/md";
+import { MdOutlineLightMode, MdOutlineNightlight } from "react-icons/md";
 
 export const Navbar = () => {
   const [mounted, setMounted] = useState(false);
@@ -15,10 +15,11 @@ export const Navbar = () => {
   if (!mounted) return null;
 
   return (
-    <div
-      className="w-full p-4 flex flex-row items-center px-10 bg-neutral-200 dark:bg-neutral-800"
-    >
-      <Link href="/" className="w-full flex justify-start items-center cursor-pointer">
+    <div className="w-full p-4 flex flex-row items-center px-10 bg-neutral-200 dark:bg-neutral-800">
+      <Link
+        href="/"
+        className="w-full flex justify-start items-center cursor-pointer"
+      >
         <div className="w-1/8 mx-2">
           <Image src="/images/pokeball.png" alt="icon" width={35} height={35} />
         </div>
@@ -32,11 +33,24 @@ export const Navbar = () => {
           className="mx-2 bg-stone-700 bg-transparent text-black dark:text-white"
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         >
-        {theme === "light" ? <MdOutlineNightlight size={20} /> : <MdOutlineLightMode size={20} />}
+          {theme === "light" ? (
+            <MdOutlineNightlight size={20} />
+          ) : (
+            <MdOutlineLightMode size={20} />
+          )}
         </button>
-        <Link href="/favorites">
-          <p className="text-lg font-Poppins font-black hover:text-yellow-400">Favorites</p>
-        </Link>
+        <div className="flex justify-between items-center">
+          <Link href="/">
+            <p className="mx-6 text-lg font-Poppins font-black hover:text-neutral-400">
+              Home
+            </p>
+          </Link>
+          <Link href="/favorites">
+            <p className="text-lg font-Poppins font-black hover:text-yellow-400">
+              Favorites
+            </p>
+          </Link>
+        </div>
       </div>
     </div>
   );
