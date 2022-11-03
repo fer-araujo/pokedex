@@ -14,6 +14,7 @@ interface Props {
   description: string;
 }
 
+// Pokemon Profile Page
 const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
   const [isInFavorites, setIsInFavorites] = useState(
     localFavorites.existInFavorites(pokemon.id)
@@ -21,16 +22,19 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
 
   const router = useRouter();
 
+  // Function to navigate to another Pokemon.
   const prevPage = () => {
     const prev = pokemon.id - 1 > 0 ? pokemon.id - 1 : 1;
     router.push(`${prev}`);
   };
 
+  // Function to navigate to another Pokemon.
   const nextPage = () => {
     const next = pokemon.id + 1 < 252 ? pokemon.id + 1 : 251;
     router.push(`${next}`);
   };
 
+  // Toggle the favorite state and the LocalStorage array
   const handleToggleFavorite = () => {
     localFavorites.toggleFavorite(pokemon.id, {
       id: pokemon.id,
@@ -41,6 +45,7 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
     setIsInFavorites(!isInFavorites);
   };
 
+  // Function design to get an specific background in tailwindcss class
   const getBackground = (type: string) => {
     let item = "";
 
@@ -94,10 +99,14 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
 
   return (
     <Layout title={pokemon.name}>
+      {/* Back Button */}
       <Back />
 
+      {/* Box  */}
       <div className="w-full h-full lg:h-screen flex flex-col justify-start items-center ">
         <div className="flex flex-row justify-center items-center my-10 md:my-2 md:mt-10">
+
+          {/* # - Name */}
           <span className="mr-4 text-4xl font-black capitalize font-Poppins">
             #{pokemon.id}
           </span>
@@ -105,9 +114,13 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
             {pokemon.name}
           </p>
         </div>
+
+        {/* Navigation Arrows */}
         <div className="w-3/5 relative mb-12 lg:mb-[7%] xl:mb-10 flex flex-row justify-around items-center ">
           <Navigation prev={prevPage} next={nextPage} />
         </div>
+
+        {/* Pokemon Data */}
         <div className="w-full h-full lg:h-4/5 md:py-6 lg:py-0 xl:py-5 2xl:py-9 mb-6 flex flex-col lg:flex-row justify-around items-center">
           <motion.div
             animate={{ opacity: [0, 1] }}
@@ -208,9 +221,12 @@ const PokemonProfile: NextPage<Props> = ({ pokemon, description }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  //Emulation of the 251 pokemons in an array of indexes.
   const pokemon = [...Array(251)].map((poke, index) => `${index + 1}`);
 
   return {
+    // we return the id of each pokemon in the params so we only fetch
+    // the data of an specific pokemon
     paths: pokemon.map((id) => ({
       params: { id },
     })),
@@ -219,8 +235,10 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  // # of pokemon
   const { id } = params as { id: string };
 
+  //We fetch all the information about the specific pokemon
   const poke = await getPokemonBig(id);
   const description = await getPokemonDescription(id);
 

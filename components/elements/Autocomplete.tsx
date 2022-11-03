@@ -11,6 +11,7 @@ interface Props {
 export const Autocomplete: FC<Props> = ({ label, options, callback }) => {
   const [selected, setSelected] = useState<string>("");
 
+  //Filter function to return a filtered array with the coincidences based on the search
   const showFilter = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length > 0) {
