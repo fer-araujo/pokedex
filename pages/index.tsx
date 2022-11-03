@@ -16,6 +16,7 @@ interface Props {
   allTypes: Result[];
 }
 
+// Home page
 const Home: NextPage<Props> = ({ pokemons, allTypes }) => {
   return (
     <Layout title="Pokemons List">
@@ -25,12 +26,18 @@ const Home: NextPage<Props> = ({ pokemons, allTypes }) => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
+
+  // All the 251 pokemons in an array of objects with the following structure:
+  // results[{name: bulbasaur, url: 'http://pokeapi.co/pokemon/1'} ]
   const { data } = await getPokemonList();
 
+  // All the types of pokemons in an array of objects with the following structure:
+  // results[{id: 1, name: normal} ]
   const allTypes: Result[] = await getTypes();
 
   const pokemon = data.results;
 
+  // Mapping the pokemons so we only get the data we need
   const pokemons: Pokemon[] =  pokemon.map((pokemon, index) => {
 
     return(

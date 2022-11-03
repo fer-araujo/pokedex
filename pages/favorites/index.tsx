@@ -11,9 +11,11 @@ interface Props {
   allTypes: Result[];
 }
 
+// Favorites
 const Favorites: NextPage<Props> = ({ allTypes }) => {
   const [favoritePokemons, setFavoritePokemons] = useState<Pokemon[]>([]);
 
+  // UseEffect to define the array with the favorite pokemons 
   useEffect(() => {
     setFavoritePokemons(localFavorites.pokemons());
   }, []);
@@ -31,6 +33,7 @@ const Favorites: NextPage<Props> = ({ allTypes }) => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
+  //Fetch all the types of pokemons
   const allTypes: Result[] = await getTypes();
 
   return {
